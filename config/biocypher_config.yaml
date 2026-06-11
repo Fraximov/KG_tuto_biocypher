@@ -1,41 +1,19 @@
-# BioCypher Configuration for BioCypherWorkshop Tutorial Knowledge Graph
-
+#-------------------------------------------------------------------
+#-----------------       BIOCYPHER SETTINGS        -----------------
+#-------------------------------------------------------------------
 biocypher:
-  #---- REQUIRED PARAMETERS
-
   dbms: neo4j
-  schema_config_path: config/schema_config.yaml
   offline: true
+  schema_config_path: config/schema_config.yaml
   strict_mode: false
   head_ontology:
     url: https://github.com/biolink/biolink-model/raw/v3.2.1/biolink-model.owl.ttl
     root_node: entity
     switch_label_and_id: true
-
-  #---- OPTIONAL PARAMETERS
-  log_to_disk: true
-
-  debug: true
-
-  log_directory: biocypher-log
-
-  output_directory: biocypher-out
-
+  debug: false
   cache_directory: .cache
-
-  #---- OPTIONAL TAIL ONTOLOGIES
-
-  # tail_ontologies:
-  #   so:
-  #     url: test/ontologies/so.owl
-  #     head_join_node: sequence variant
-  #     tail_join_node: sequence_variant
-  #     switch_label_and_id: true
-  #   mondo:
-  #     url: test/ontologies/mondo.owl
-  #     head_join_node: disease
-  #     tail_join_node: disease
-  #     switch_label_and_id: true
+  output_directory: biocypher-out
+  log_directory: biocypher-log
 
 #-------------------------------------------------------------------
 #-----------------       OUTPUT Configuration      -----------------
@@ -43,63 +21,24 @@ biocypher:
 #---- NEO4J database management system
 neo4j:
   database_name: neo4j
-  wipe: true
-
-  uri: neo4j://localhost:7687
-  user: neo4j
-  password: neo4j
-
-  delimiter: ";"
-  array_delimiter: "|"
-  quote_character: "'"
-
-  multi_db: true
-
-  skip_duplicate_nodes: false
-  skip_bad_relationships: false
-
-  # import_call_bin_prefix: bin/
-  # import_call_file_prefix: path/to/files/
-
-#---- PostgreSQL database management system
-postgresql:
-  database_name: postgres
-
-  host: localhost # host
-  port: 5432 # port
-
-  user: postgres
-  password: postgres # password
-
+  delimiter: "\t"
+  array_delimiter: ";"
   quote_character: '"'
-  delimiter: '\t'
-  # import_call_bin_prefix: '' # path to "psql"
-  # import_call_file_prefix: '/path/to/files'
+  skip_duplicate_nodes: true
+  skip_bad_relationships: true
 
-#---- SQLite database management system
-sqlite:
-  ### SQLite configuration ###
-
-  # SQLite connection credentials
-  database_name: sqlite.db # DB name
-
-  # SQLite import batch writer settings
-  quote_character: '"'
-  delimiter: '\t'
-  # import_call_bin_prefix: '' # path to "sqlite3"
-  # import_call_file_prefix: '/path/to/files'
-
-#---- RDF (Resource Description Framework) data model
-rdf:
-  ### RDF configuration ###
-  rdf_format: turtle
-
-#---- NetworkX graph data model
-networkx:
-  ### NetworkX configuration ###
-  some_config: some_value # placeholder for technical reasons TODO
-
-#---- CSV (Comma-Separated Values) text file format
-csv:
-  ### CSV/Pandas configuration ###
-  delimiter: ","
+  # ---------- YOUR CODE STARTS HERE ----------
+  # Step 1: Set the path to your Neo4j instance binary folder.
+  #
+  #   This tells BioCypher where to find the neo4j-admin executable so it can
+  #   build the correct import command for your machine.
+  #
+  #   To find the path:
+  #     1. Open Neo4j Desktop.
+  #     2. Go to the Overview tab of your instance.
+  #     3. Copy the path shown — it looks like /path/to/neo4j-instance/
+  #     4. Append /bin/ to that path.
+  #
+  #   Then uncomment and fill in the line below:
+  # import_call_bin_prefix: /path/to/your/neo4j-instance/bin/
+  # ---------- YOUR CODE ENDS HERE ----------
