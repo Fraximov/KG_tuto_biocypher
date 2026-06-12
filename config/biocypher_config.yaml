@@ -27,18 +27,13 @@ neo4j:
   skip_duplicate_nodes: true
   skip_bad_relationships: true
 
+  # ── TODO 1 ───────────────────────────────────────────────────────────────
+  # Task: Set the path to your Neo4j instance binary folder.
+  # Why:  BioCypher needs this to locate neo4j-admin and generate the correct
+  #       import command for your machine.
+  # Hint: Open Neo4j Desktop → Overview tab → copy the instance path shown
+  #       (e.g. /home/user/neo4j-instance/) and append /bin/ to it.
+  # ────────────────────────────────────────────────────────────────────────
   # ---------- YOUR CODE STARTS HERE ----------
-  # Step 1: Set the path to your Neo4j instance binary folder.
-  #
-  #   This tells BioCypher where to find the neo4j-admin executable so it can
-  #   build the correct import command for your machine.
-  #
-  #   To find the path:
-  #     1. Open Neo4j Desktop.
-  #     2. Go to the Overview tab of your instance.
-  #     3. Copy the path shown — it looks like /path/to/neo4j-instance/
-  #     4. Append /bin/ to that path.
-  #
-  #   Then uncomment and fill in the line below:
   # import_call_bin_prefix: /path/to/your/neo4j-instance/bin/
   # ---------- YOUR CODE ENDS HERE ----------

@@ -47,34 +47,17 @@ class ProteinInteractionAdapter:
         # BioCypher node tuple format:
         # (node_id, node_label, properties)
 
+        # ── REFERENCE ────────────────────────────────────────────────────────
+        # Steps 1–2.4 are already implemented. Read them to understand the
+        # data preparation before you implement the yield step (TODO 4).
+        # ─────────────────────────────────────────────────────────────────────
 
         # Step 1: Read the interaction TSV into a DataFrame.
-        #
-        # Why this matters:
-        #   The adapter operates row-wise and needs a tabular structure
-        #   before it can build BioCypher node tuples.
-        #
-        # Hint:
-        #   Use pd.read_csv(self.data_source, sep="\t").
-        # ---------- YOUR CODE STARTS HERE ----------
         df = pd.read_csv(self.data_source, sep="\t")
-        # ---------- YOUR CODE ENDS HERE ----------
-      
-        
+
         # Step 2.1: Build the source-side Protein table.
-        #
-        # Why this matters:
-        #   Each interaction row has a source protein that must become a node.
-        #
-        # Hint:
-        #   Select source-side columns and rename to:
-        #     - node_id
-        #     - genesymbol
-        #     - ncbi_tax_id
-        #     - entity_type
-        # ---------- YOUR CODE STARTS HERE ----------
         source_nodes = df[
-                    ["source", "source_genesymbol", "ncbi_tax_id_source", "entity_type_source"]
+            ["source", "source_genesymbol", "ncbi_tax_id_source", "entity_type_source"]
         ].copy()
         source_nodes = source_nodes.rename(
             columns={
@@ -84,18 +67,8 @@ class ProteinInteractionAdapter:
                 "entity_type_source": "entity_type",
             }
         )
-        # ---------- YOUR CODE ENDS HERE ----------
-        
 
         # Step 2.2: Build the target-side Protein table.
-        #
-        # Why this matters:
-        #   The target protein is also a node and must be included.
-        #
-        # Hint:
-        #   Mirror Step 2.1 using target-side columns, then rename
-        #   to the same common schema.
-        # ---------- YOUR CODE STARTS HERE ----------
         target_nodes = df[
             ["target", "target_genesymbol", "ncbi_tax_id_target", "entity_type_target"]
         ].copy()
@@ -107,50 +80,24 @@ class ProteinInteractionAdapter:
                 "entity_type_target": "entity_type",
             }
         )
-        # ---------- YOUR CODE ENDS HERE ----------
-
-
 
         # Step 2.3: Merge source-side and target-side proteins.
-        #
-        # Why this matters:
-        #   A single unified table simplifies downstream node emission.
-        #
-        # Hint:
-        #   Use pd.concat([source_nodes, target_nodes], ignore_index=True).
-        # ---------- YOUR CODE STARTS HERE ----------
         proteins_df = pd.concat([source_nodes, target_nodes], ignore_index=True)
-        # ---------- YOUR CODE ENDS HERE ----------
-
-
 
         # Step 2.4: Remove duplicate proteins by node_id.
-        #
-        # Why this matters:
-        #   The same protein can appear in many interactions and should only
-        #   exist once as a node.
-        #
-        # Hint:
-        #   Use drop_duplicates(subset=["node_id"]).
-        # ---------- YOUR CODE STARTS HERE ----------
         proteins_df = proteins_df.drop_duplicates(subset=["node_id"])
-        # ---------- YOUR CODE ENDS HERE ----------
 
-
-        # Step 3: Yield nodes in BioCypher format.
-        #
-        # Why this matters:
-        #   BioCypher expects node tuples in this exact shape:
-        #   (node_id, node_label, properties).
-        #
-        # Hint:
-        #   Use label "uniprot_protein" and build properties with:
-        #     - genesymbol
-        #     - ncbi_tax_id
-        #     - entity_type
-        #   Cast IDs/taxonomy fields to str for consistency.
+        # ── TODO 4 ───────────────────────────────────────────────────────────
+        # Task: Yield one BioCypher node tuple per unique protein.
+        # Why:  BioCypher expects this exact 3-element tuple shape:
+        #       (node_id, node_label, properties)
+        # Hint: Iterate over proteins_df rows. For each row yield:
+        #         (str(row["node_id"]),
+        #          "uniprot_protein",
+        #          {"genesymbol": ..., "ncbi_tax_id": str(...), "entity_type": ...})
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
-        
+
         # ---------- YOUR CODE ENDS HERE ----------
 
         
@@ -168,83 +115,57 @@ class ProteinInteractionAdapter:
         # BioCypher edge tuple format:
         # (edge_id, source_id, target_id, edge_label, properties)
 
-        # Step 1: Read the interaction TSV into a DataFrame.
-        #
-        # Why this matters:
-        #   Each row represents one interaction and is the source for
-        #   one BioCypher edge tuple.
-        #
-        # Hint:
-        #   Use pd.read_csv(self.data_source, sep="\t").
+        # ── TODO 5a ──────────────────────────────────────────────────────────
+        # Task: Read the interaction TSV into a DataFrame.
+        # Why:  Each row represents one interaction and maps to one edge tuple.
+        # Hint: Use pd.read_csv(self.data_source, sep="\t").
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
         # ---------- YOUR CODE ENDS HERE ----------
 
-        # Step 2.1: Iterate over interaction rows.
-        #
-        # Why this matters:
-        #   Each row in the table should produce one edge tuple.
-        #
-        # Hint:
-        #   Use a row iterator and extract values from each row.
+        # ── TODO 5b ──────────────────────────────────────────────────────────
+        # Task: Iterate over interaction rows and extract edge identifiers.
+        # Why:  Each row produces one edge; stable IDs make the graph easier
+        #       to validate and debug.
+        # Hint: Use df.iterrows(). From each row extract:
+        #         source_id  = str(row["source"])
+        #         target_id  = str(row["target"])
+        #         interaction_type = str(row["type"])
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
         # ---------- YOUR CODE ENDS HERE ----------
 
-        # Step 2.2: Extract normalized edge identifiers.
-        #
-        # Why this matters:
-        #   Stable and consistent identifiers make the graph easier
-        #   to validate and debug.
-        #
-        # Hint:
-        #   Build:
-        #     - source_id from row["source"]
-        #     - target_id from row["target"]
-        #     - interaction_type from row["type"]
-        #   Cast to str.
+        # ── TODO 5c ──────────────────────────────────────────────────────────
+        # Task: Build a deterministic edge_id.
+        # Why:  A predictable edge_id makes tracing and deduplication easier.
+        # Hint: Use f"{source_id}_{target_id}_{interaction_type}".
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
         # ---------- YOUR CODE ENDS HERE ----------
 
-        # Step 2.3: Build a deterministic edge_id.
-        #
-        # Why this matters:
-        #   A predictable edge_id makes tracing and dedup checks easier.
-        #
-        # Hint:
-        #   Use f"{source_id}_{target_id}_{interaction_type}".
+        # ── TODO 5d ──────────────────────────────────────────────────────────
+        # Task: Build edge properties from interaction flags.
+        # Why:  These boolean flags carry biological meaning and must be
+        #       preserved as edge-level attributes in the graph.
+        # Hint: Build a dict with these keys, converting values to bool:
+        #         is_directed, is_stimulation, is_inhibition,
+        #         consensus_direction, consensus_stimulation,
+        #         consensus_inhibition
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
         # ---------- YOUR CODE ENDS HERE ----------
 
-        # Step 2.4: Build edge properties from interaction flags.
-        #
-        # Why this matters:
-        #   Flags carry biological meaning and should be preserved
-        #   as edge-level attributes.
-        #
-        # Hint:
-        #   Include these keys and convert values to bool:
-        #     - is_directed
-        #     - is_stimulation
-        #     - is_inhibition
-        #     - consensus_direction
-        #     - consensus_stimulation
-        #     - consensus_inhibition
-        # ---------- YOUR CODE STARTS HERE ----------
-
-        # ---------- YOUR CODE ENDS HERE ----------
-
-        # Step 3: Yield edges in BioCypher format.
-        #
-        # Why this matters:
-        #   BioCypher expects edge tuples in this exact shape:
-        #   (edge_id, source_id, target_id, edge_label, properties).
-        #
-        # Hint:
-        #   Use interaction_type as edge_label and emit one tuple per row.
-        #   Optional: skip malformed rows missing source/target/type.
+        # ── TODO 5e ──────────────────────────────────────────────────────────
+        # Task: Yield one BioCypher edge tuple per interaction row.
+        # Why:  BioCypher expects this exact 5-element tuple shape:
+        #       (edge_id, source_id, target_id, edge_label, properties)
+        # Hint: Use interaction_type as the edge_label. Optionally skip rows
+        #       where source, target, or type is missing.
+        # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
         # ---------- YOUR CODE ENDS HERE ----------

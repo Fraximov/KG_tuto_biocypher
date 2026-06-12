@@ -6,17 +6,15 @@ protein:
     represented_as: node
     preferred_id: uniprot
     input_label: uniprot_protein
-    # Step 1: Add node properties for proteins.
-    #
-    # Why this matters:
-    #   These properties are carried into the graph and make protein
-    #   nodes queryable by symbol, taxonomy, and entity category.
-    #
-    # Hint:
-    #   Use the normalized keys produced by the adapter:
-    #     genesymbol
-    #     ncbi_tax_id
-    #     entity_type
+    # ── TODO 2 ───────────────────────────────────────────────────────────────
+    # Task: Add node properties for proteins.
+    # Why:  These properties are stored on each Protein node and make it
+    #       queryable by gene symbol, taxonomy, and entity category.
+    # Hint: Use the normalized keys produced by the adapter:
+    #         genesymbol, ncbi_tax_id, entity_type
+    #       Format: properties:
+    #                 genesymbol: str
+    # ────────────────────────────────────────────────────────────────────────
     # ---------- YOUR CODE STARTS HERE ----------
 
     # ---------- YOUR CODE ENDS HERE ----------
@@ -40,56 +38,28 @@ protein protein interaction:
         consensus_inhibition: bool
 
 #====   INHERITED EDGES
+
+# ── REFERENCE ────────────────────────────────────────────────────────────────
+# This entry is already complete. Use it as the template for TODO 3.
+# ─────────────────────────────────────────────────────────────────────────────
 activation:
     is_a: protein protein interaction
     inherit_properties: true
     represented_as: edge
     input_label: activation
 
-# Step 2: Use one interaction as the full reference template.
-#
-# Why this matters:
-#   A single correct example reduces schema drift and makes the
-#   remaining interaction declarations easy to replicate.
-#
-# Hint:
-#   Use activation as the completed pattern.
-
-# Step 3: Complete the remaining interaction edge types.
-#
-# Why this matters:
-#   Each interaction type in the dataset needs a matching schema entry
-#   so BioCypher can map edge labels correctly.
-#
-# Hint:
-#   For each interaction below, keep the same structure as activation:
-#     is_a: protein protein interaction
-#     inherit_properties: true
-#     represented_as: edge
-#     input_label: <same name as the interaction type>
+# ── TODO 3 ───────────────────────────────────────────────────────────────────
+# Task: Complete the four remaining edge types.
+# Why:  Each interaction type in the dataset needs its own schema entry so
+#       BioCypher maps edge labels correctly when writing CSV files.
+# Hint: Copy the activation block above and change the top-level key and
+#       input_label to match each type: binding, inhibition,
+#       phosphorylation, ubiquitination.
+# ─────────────────────────────────────────────────────────────────────────────
 # ---------- YOUR CODE STARTS HERE ----------
-binding:
-    is_a: protein protein interaction
-    inherit_properties: true
-    represented_as: edge
-    input_label: binding
 
-inhibition:
-    is_a: protein protein interaction
-    inherit_properties: true
-    represented_as: edge
-    input_label: inhibition
 
-phosphorylation:
-    is_a: protein protein interaction
-    inherit_properties: true
-    represented_as: edge
-    input_label: phosphorylation
 
-ubiquitination:
-    is_a: protein protein interaction
-    inherit_properties: true
-    represented_as: edge
-    input_label: ubiquitination
+
 # ---------- YOUR CODE ENDS HERE ----------
 
