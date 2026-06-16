@@ -6,6 +6,11 @@ protein:
     represented_as: node
     preferred_id: uniprot
     input_label: uniprot_protein
+    properties:
+        uniprot: str
+        genesymbol: str
+        ncbi_tax_id: int
+        entity_type: str
     # ── TODO 2 ───────────────────────────────────────────────────────────────
     # Task: Add node properties for proteins.
     # Why:  These properties are stored on each Protein node and make it
@@ -47,6 +52,26 @@ activation:
     inherit_properties: true
     represented_as: edge
     input_label: activation
+binding:
+    is_a: protein protein interaction
+    inherit_properties: true
+    represented_as: edge
+    input_label: binding
+inhibition:
+    is_a: protein protein interaction
+    inherit_properties: true
+    represented_as: edge
+    input_label: inhibition
+phosphorylation:
+    is_a: protein protein interaction
+    inherit_properties: true
+    represented_as: edge
+    input_label: phosphorylation
+ubiquitination:
+    is_a: protein protein interaction
+    inherit_properties: true
+    represented_as: edge
+    input_label: ubiquitination
 
 # ── TODO 3 ───────────────────────────────────────────────────────────────────
 # Task: Complete the four remaining edge types.
