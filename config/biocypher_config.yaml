@@ -21,12 +21,12 @@ biocypher:
 #---- NEO4J database management system
 neo4j:
   database_name: neo4j
-  delimiter: "\t"
+  delimiter: '\t'
   array_delimiter: ";"
   quote_character: '"'
   skip_duplicate_nodes: true
   skip_bad_relationships: true
-  import_call_bin_prefix: /Users/francois-xavier/Library/Application Support/neo4j-desktop/Application/Data/dbmss/dbms-fff03a51-9434-4068-bb95-7d9b34c46ced/bin/
+  import_call_bin_prefix: /Users/francois-xavier/Library/Application\ Support/neo4j-desktop/Application/Data/dbmss/dbms-fff03a51-9434-4068-bb95-7d9b34c46ced/bin/
 
   # ── TODO 1 ───────────────────────────────────────────────────────────────
   # Task: Set the path to your Neo4j instance binary folder.

@@ -58,6 +58,8 @@ def main():
     # ─────────────────────────────────────────────────────────────────────────
     # ---------- YOUR CODE STARTS HERE ----------
     
+    protein_interaction_adapter = ProteinInteractionAdapter(data_source=protein_interaction_file)
+
 
     # ---------- YOUR CODE ENDS HERE ----------
 
@@ -68,7 +70,7 @@ def main():
     # Hint: adapters = [protein_interaction_adapter]
     # ─────────────────────────────────────────────────────────────────────────
     # ---------- YOUR CODE STARTS HERE ----------
-
+    adapters = [protein_interaction_adapter]
     # ---------- YOUR CODE ENDS HERE ----------
 
     # ── REFERENCE ────────────────────────────────────────────────────────────

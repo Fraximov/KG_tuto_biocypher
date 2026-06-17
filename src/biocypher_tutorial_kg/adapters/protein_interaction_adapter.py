@@ -98,6 +98,17 @@ class ProteinInteractionAdapter:
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
+        for _, row in proteins_df.iterrows():
+            yield (
+                str(row["node_id"]),
+                "uniprot_protein",
+                {
+                    "genesymbol": row["genesymbol"],
+                    "ncbi_tax_id": str(row["ncbi_tax_id"]),
+                    "entity_type": row["entity_type"],
+                },
+            )
+
         # ---------- YOUR CODE ENDS HERE ----------
 
         
@@ -121,6 +132,7 @@ class ProteinInteractionAdapter:
         # Hint: Use pd.read_csv(self.data_source, sep="\t").
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
+        df = pd.read_csv(self.data_source, sep="\t")
 
         # ---------- YOUR CODE ENDS HERE ----------
 
@@ -134,6 +146,10 @@ class ProteinInteractionAdapter:
         #         interaction_type = str(row["type"])
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
+        for _, row in df.iterrows():
+            source_id = str(row["source"])
+            target_id = str(row["target"])
+            interaction_type = str(row["type"])
 
         # ---------- YOUR CODE ENDS HERE ----------
 
@@ -141,6 +157,7 @@ class ProteinInteractionAdapter:
         # Task: Build a deterministic edge_id.
         # Why:  A predictable edge_id makes tracing and deduplication easier.
         # Hint: Use f"{source_id}_{target_id}_{interaction_type}".
+            edge_id = f"{source_id}_{target_id}_{interaction_type}"
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
 
@@ -156,6 +173,14 @@ class ProteinInteractionAdapter:
         #         consensus_inhibition
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
+            properties = {
+                "is_directed": bool(row["is_directed"]),
+                "is_stimulation": bool(row["is_stimulation"]),
+                "is_inhibition": bool(row["is_inhibition"]),
+                "consensus_direction": bool(row["consensus_direction"]),
+                "consensus_stimulation": bool(row["consensus_stimulation"]),
+                "consensus_inhibition": bool(row["consensus_inhibition"]),
+            }
 
         # ---------- YOUR CODE ENDS HERE ----------
 
@@ -167,6 +192,14 @@ class ProteinInteractionAdapter:
         #       where source, target, or type is missing.
         # ─────────────────────────────────────────────────────────────────────
         # ---------- YOUR CODE STARTS HERE ----------
+            if source_id and target_id and interaction_type:
+                yield (
+                    edge_id,
+                    source_id,
+                    target_id,
+                    interaction_type,
+                    properties,
+                )
 
         # ---------- YOUR CODE ENDS HERE ----------
 

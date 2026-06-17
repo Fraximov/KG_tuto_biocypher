@@ -7,7 +7,6 @@ protein:
     preferred_id: uniprot
     input_label: uniprot_protein
     properties:
-        uniprot: str
         genesymbol: str
         ncbi_tax_id: int
         entity_type: str
